@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Implied Volatility Surface</title>
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #surface-plot {
+        height: 100vh;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="surface-plot"></div>
+
+    <script>
+      // Example implied volatility surface data
+      const z = [
+        [25, 27, 29, 31],
+        [28, 32, 35, 38],
+        [30, 35, 42, 50],
+        [32, 40, 52, 65]
+      ];
+
+      const x = [0.25, 1.0, 1.75, 2.5]; // Time to expiration (years)
+      const y = [450, 500, 550, 600];   // Strike prices
+
+      const data = [{
+        type: 'surface',
+        x: x,
+        y: y,
+        z: z,
+        colorscale: 'Jet',
+        showscale: true,
+        hovertemplate:
+          'Time to Expiration: %{x:.2f} years<br>' +
+          'Strike Price: $%{y}<br>' +
+          'Implied Volatility: %{z:.2f}%<extra></extra>'
+      }];
+
+      const layout = {
+        title: {
+          text: 'Implied Volatility Surface',
+          font: { size: 24 },
+          x: 0.5,
+          xanchor: 'center'
+        },
+        margin: { l: 0, r: 0, b: 0, t: 60 },
+        scene: {
+          xaxis: {
+            title: {
+              text: 'Time to Expiration (years)',
+              font: { size: 16 }
+            }
+          },
+          yaxis: {
+            title: {
+              text: 'Strike Price ($)',
+              font: { size: 16 }
+            }
+          },
+          zaxis: {
+            title: {
+              text: 'Implied Volatility (%)',
+              font: { size: 16 }
+            }
+          }
+        }
+      };
+
+      Plotly.newPlot('surface-plot', data, layout, { responsive: true });
+    </script>
+  </body>
+</html>
