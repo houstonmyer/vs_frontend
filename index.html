@@ -1,81 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="icon" type="image/x-con" href="images/favicon_from_png.ico" />
     <meta charset="utf-8" />
     <title>Implied Volatility Surface</title>
+    <meta name="viewport" content="width=device-width, intial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-      }
-      #surface-plot {
-        height: 100vh;
-        width: 100%;
-      }
-    </style>
   </head>
   <body>
-    <div id="surface-plot"></div>
+    <header>
+      <div class="brand">
+        <img src="images/logo_64x64_zoomedv2.png" alt="Logo" class="logo" />
+        <h1>Volatility Surfaces</h1>
+      </div>
+    </header>
 
-    <script>
-      // Example implied volatility surface data
-      const z = [
-        [25, 27, 29, 31],
-        [28, 32, 35, 38],
-        [30, 35, 42, 50],
-        [32, 40, 52, 65]
-      ];
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>Parameters</h2>
 
-      const x = [0.25, 1.0, 1.75, 2.5]; // Time to expiration (years)
-      const y = [450, 500, 550, 600];   // Strike prices
+        <div class="sidebar-group">
+          <label>Ticker Symbol:</label>
+          <input id="ticker-input" type ="text" placeholder="e.g. APPL" value ="AAPL" />
+        </div>
+        <div class="sidebar-group">
+          <label>Spot Price:</label>
+          <div id="spot-display" style="font-weight: bold;">--</div>
+        </div>
 
-      const data = [{
-        type: 'surface',
-        x: x,
-        y: y,
-        z: z,
-        colorscale: 'Jet',
-        showscale: true,
-        hovertemplate:
-          'Time to Expiration: %{x:.2f} years<br>' +
-          'Strike Price: $%{y}<br>' +
-          'Implied Volatility: %{z:.2f}%<extra></extra>'
-      }];
+        <div class="sidebar-group">
+          <label>Axis: Strike or Moneyness</label>
+          <button id="toggle-axis" data-axis="strike">Strike</button>
+        </div>
 
-      const layout = {
-        title: {
-          text: 'Implied Volatility Surface',
-          font: { size: 24 },
-          x: 0.5,
-          xanchor: 'center'
-        },
-        margin: { l: 0, r: 0, b: 0, t: 60 },
-        scene: {
-          xaxis: {
-            title: {
-              text: 'Time to Expiration (years)',
-              font: { size: 16 }
-            }
-          },
-          yaxis: {
-            title: {
-              text: 'Strike Price ($)',
-              font: { size: 16 }
-            }
-          },
-          zaxis: {
-            title: {
-              text: 'Implied Volatility (%)',
-              font: { size: 16 }
-            }
-          }
-        }
-      };
+        <div class="sidebar-group">
+          <label>Calls to Show:</label>
+          <input id="call-count" type="number" min="1" max="50" value="10" />
+        </div>
 
-      Plotly.newPlot('surface-plot', data, layout, { responsive: true });
-    </script>
+        <div class="sidebar-group">
+          <button id="export-data">Export Data</button>
+        </div>
+
+        <div class="sidebar-group">
+          <button id="refresh-button">Refresh</button>
+        </div>
+
+      </aside>
+      <main>
+        <div id="surface-plot"></div>
+      </main>
+    </div>
+    
+  
+
+    <script src=main.js> </script>
   </body>
+  <footer>
+    <p>© 2025 volatilitysurfaces.com Created by Houston Myer </p>
+    
+  </footer>
+   
 </html>
