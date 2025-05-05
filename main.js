@@ -4,7 +4,10 @@ async function fetchAndPlot() {
   const callCount = document.getElementById('call-count').value.trim();
     try {
       console.log("ticker:", ticker);
-      const res = await fetch(`http://127.0.0.1:8000/api/surface?ticker=${ticker}&xAxis=${axis}&max_expiries=${callCount}`);
+      const baseUrl = window.location.hostname === "localhost"
+      ? "http://127.0.0.1:8000"
+      : "https://api.volatilitysurfaces.com";
+      const res = await fetch(`${baseURL}/api/surface?ticker=${ticker}&xAxis=${axis}&max_expiries=${callCount}`);
       const data = await res.json();
 
       if (!data.x || !data.y || !data.z) {
