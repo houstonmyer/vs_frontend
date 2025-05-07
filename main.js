@@ -2,16 +2,23 @@ async function fetchAndPlot() {
   const ticker = document.getElementById('ticker-input').value.trim().toUpperCase();
   const axis = document.getElementById('toggle-axis').getAttribute('data-axis');
   const callCount = document.getElementById('call-count').value.trim();
-  const baseUrl = window.location.hostname === "localhost"? "http://127.0.0.1:8000": "https://api.volatilitysurfaces.com";
+  //const baseUrl = "http://127.0.0.1:8000"
+  const baseUrl = "https://api.volatilitysurfaces.com"
     try {
       console.log("ticker:", ticker);
       
       const res = await fetch(`${baseUrl}/api/surface?ticker=${ticker}&xAxis=${axis}&max_expiries=${callCount}`);
       const data = await res.json();
+      
+
+
 
       if (!data.x || !data.y || !data.z) {
-        throw new Error('Invalid data format');
-        return;
+        if ("error" in data){
+          console.log(data.error)
+        }
+        throw new Error('Invalid data format/data not found');
+        
       }
       function transpose(matrix) {
       return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
@@ -21,7 +28,8 @@ async function fetchAndPlot() {
       const ylabels = data.y_labels;
       const x = data.x    // Expiry in years
       const y = data.y    // Strike prices
-      const z = data.z // IV matrix [strike][expiry]
+      const z = data.z 
+      // IV matrix [strike][expiry]
       //z[i][j] = IV at expiry[i], strike[j]
       //this is reverse of what ploty expects which is 
       //z[y][x] = IV at strike[y], expiry[x]
