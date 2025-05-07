@@ -67,12 +67,15 @@ async function fetchAndPlot() {
             : 'Strike Price: $%{y:.2f}<br>') +
           'Implied Volatility: %{z:.2f}%<extra></extra>',
       }];
+      const now = new Date();
+      const time = now.toLocaleTimeString();
 
       const layout = {
         title: {
-          //text: 'Implied Volatility Surface',
-          font: { size: 24 },
+          text: `${spot} ${ticker} at ${time}`,
+          font: { size: 16 },
           x: 0.5,
+          y: .97,
           xanchor: 'center'
         },
         margin: { l: 0, r: 0, b: 0, t: 20 },
