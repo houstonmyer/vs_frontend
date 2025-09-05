@@ -1,13 +1,30 @@
+//const { min } = require("three/examples/jsm/nodes/Nodes.js");
+
+
+const loader = document.getElementById('plot-loader');
+
+function showPlotLoader() {
+  loader.removeAttribute('hidden');
+}
+
+function hidePlotLoader() {
+  loader.setAttribute('hidden', '');
+}
+
 async function fetchAndPlot() {
   const ticker = document.getElementById('ticker-input').value.trim().toUpperCase();
   const axis = document.getElementById('toggle-axis').getAttribute('data-axis');
   const callCount = document.getElementById('call-count').value.trim();
-  //const baseUrl = "http://127.0.0.1:8000"
-  const baseUrl = "https://api.volatilitysurfaces.com"
+  const minPct = document.getElementById('min-pct').value.trim();
+  const maxPct = document.getElementById('max-pct').value.trim();
+  const baseUrl = "http://127.0.0.1:8000"
+  console.log(minPct, maxPct)
+  //const baseUrl = "https://api.volatilitysurfaces.com"
     try {
+      showPlotLoader();
       console.log("ticker:", ticker);
       
-      const res = await fetch(`${baseUrl}/api/surface?ticker=${ticker}&xAxis=${axis}&max_expiries=${callCount}`);
+      const res = await fetch(`${baseUrl}/api/surface?underlying=${ticker}&option_type=call&min_pct=${minPct}&max_pct=${maxPct}&max_expiries=${callCount}&use_moneyness=${axis === 'moneyness' ? 'true' : 'false'}`);
       const data = await res.json();
       
 
@@ -63,7 +80,7 @@ async function fetchAndPlot() {
         hovertemplate:
           'Time to Expiration: %{x:.2f} years<br>' +
           (xAxis === 'moneyness' 
-            ? 'Strike Price: $%{customdata:.2f}<br>'
+            ? 'Moneyness: %{customdata:.2f}<br>'
             : 'Strike Price: $%{y:.2f}<br>') +
           'Implied Volatility: %{z:.2f}%<extra></extra>',
       }];
@@ -72,7 +89,7 @@ async function fetchAndPlot() {
 
       const layout = {
         title: {
-          text: `${spot} ${ticker} at ${time}`,
+          text: `${spot} ${ticker} at ${time}`, // this puts a title on th graph i want to have all of the graphing logic in one function so alter dark and white mode. 
           font: { size: 16 },
           x: 0.5,
           y: .97,
@@ -106,6 +123,9 @@ async function fetchAndPlot() {
       Plotly.newPlot('surface-plot', plotData, layout, { responsive: true });
     } catch (err) {
       console.error('Failed to fetch or plot data:', err);
+    }
+    finally {
+      hidePlotLoader();
     }
   }
 
