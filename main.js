@@ -17,9 +17,9 @@ async function fetchAndPlot() {
   const callCount = document.getElementById('call-count').value.trim();
   const minPct = document.getElementById('min-pct').value.trim();
   const maxPct = document.getElementById('max-pct').value.trim();
-  const baseUrl = "http://127.0.0.1:8000"
+  //const baseUrl = "http://127.0.0.1:8000"
   console.log(minPct, maxPct)
-  //const baseUrl = "https://api.volatilitysurfaces.com"
+  const baseUrl = "https://api.volatilitysurfaces.com"
     try {
       showPlotLoader();
       console.log("ticker:", ticker);
